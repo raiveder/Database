@@ -10,7 +10,7 @@ tools:context=".Administrators">
     android:id="@+id/stamp"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:hint="Марка"
+    android:hint="@string/stamp"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toStartOf="@id/model"
@@ -18,7 +18,7 @@ tools:context=".Administrators">
 
 <EditText
     android:id="@+id/model"
-    android:hint="Модель"
+    android:hint="@string/model"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@ tools:context=".Administrators">
 
 <EditText
     android:id="@+id/year"
-    android:hint="Год выпуска"
+    android:hint="@string/year"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@id/stamp"
@@ -38,7 +38,7 @@ tools:context=".Administrators">
 
 <EditText
     android:id="@+id/mileage"
-    android:hint="Пробег"
+    android:hint="@string/mileage"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     app:layout_constraintTop_toBottomOf="@id/stamp"
@@ -50,7 +50,7 @@ tools:context=".Administrators">
     android:id="@+id/btnAdd"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:text="Add"
+    android:text="@string/add"
     app:layout_constraintEnd_toStartOf="@id/btnClear"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@id/year"
@@ -61,7 +61,7 @@ tools:context=".Administrators">
     android:id="@+id/btnClear"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:text="Clear"
+    android:text="@string/clear"
     app:layout_constraintTop_toBottomOf="@id/year"
     app:layout_constraintStart_toEndOf="@id/btnAdd"
     app:layout_constraintEnd_toEndOf="parent"
@@ -75,23 +75,6 @@ tools:context=".Administrators">
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/btnAdd">
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</TableLayout>
+    app:layout_constraintTop_toBottomOf="@+id/btnAdd"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
