@@ -7,91 +7,44 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/stamp"
+        android:id="@+id/login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Марка"
+        android:hint="@string/login"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/model"
-        app:layout_constraintBottom_toTopOf="@id/year"/>
+        app:layout_constraintEnd_toStartOf="@id/password"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <EditText
-        android:id="@+id/model"
-        android:hint="Модель"
+        android:id="@+id/password"
+        android:hint="@string/password"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/stamp"
+        app:layout_constraintStart_toEndOf="@id/login"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/year"/>
-
-    <EditText
-        android:id="@+id/year"
-        android:hint="Год выпуска"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/stamp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/mileage"
-        app:layout_constraintBottom_toTopOf="@id/btnAdd"/>
-
-    <EditText
-        android:id="@+id/mileage"
-        android:hint="Пробег"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/stamp"
-        app:layout_constraintStart_toEndOf="@id/year"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnAdd"/>
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
-        android:id="@+id/btnAdd"
+        android:id="@+id/btnEntry"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Add"
-        app:layout_constraintEnd_toStartOf="@id/btnClear"
+        android:text="@string/entry"
+        app:layout_constraintTop_toBottomOf="@id/login"
+        app:layout_constraintEnd_toStartOf="@id/btnReg"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/year"
         android:layout_marginRight="1dp"
         android:layout_marginLeft="1dp"/>
 
     <Button
-            android:id="@+id/btnClear"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            app:layout_constraintTop_toBottomOf="@id/year"
-            app:layout_constraintStart_toEndOf="@id/btnAdd"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginRight="1dp"
-            android:layout_marginLeft="1dp"/>
-
-    <TableLayout
-        android:id="@+id/dbOutput"
+        android:id="@+id/btnReg"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:text="@string/reg"
+        app:layout_constraintTop_toBottomOf="@id/login"
+        app:layout_constraintStart_toEndOf="@id/btnEntry"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
-
+        android:layout_marginRight="1dp"
+        android:layout_marginLeft="1dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

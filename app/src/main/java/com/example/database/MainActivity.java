@@ -1,183 +1,105 @@
 package com.example.database;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnAdd, btnClear;
-    EditText dbStamp, dbModel, dbYear, dbMileage;
+    Button btnEntry, btnReg;
+    EditText login, password;
 
     DBHelper dbHelper;
     SQLiteDatabase database;
-    ContentValues contentValues;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnAdd = (Button) findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(this);
-
-        btnClear = (Button) findViewById(R.id.btnClear);
-        btnClear.setOnClickListener(this);
-
-        dbStamp = (EditText) findViewById(R.id.stamp);
-        dbModel = (EditText) findViewById(R.id.model);
-        dbYear = (EditText) findViewById(R.id.year);
-        dbMileage = (EditText) findViewById(R.id.mileage);
+        btnEntry = findViewById(R.id.btnEntry);
+        btnEntry.setOnClickListener(this);
+        btnReg = findViewById(R.id.btnReg);
+        btnReg.setOnClickListener(this);
+        login = findViewById(R.id.login);
+        login.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
+                login.setHint("");
+            else
+                login.setHint("Логин");
+        });
+        password = findViewById(R.id.password);
+        password.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus)
+                password.setHint("");
+            else
+                password.setHint("Пароль");
+        });
 
         dbHelper = new DBHelper(this);
         database = dbHelper.getWritableDatabase();
 
-        UpdateTable();
-    }
-
-    public void UpdateTable() {
-        Cursor cursor = database.query(DBHelper.TABLE_CONTACTS, null, null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int stampIndex = cursor.getColumnIndex(DBHelper.KEY_STAMP);
-            int modelIndex = cursor.getColumnIndex(DBHelper.KEY_MODEL);
-            int yearIndex = cursor.getColumnIndex(DBHelper.KEY_YEAR);
-            int mileageIndex = cursor.getColumnIndex(DBHelper.KEY_MILEAGE);
-            TableLayout dbOutput = findViewById(R.id.dbOutput);
-            dbOutput.removeAllViews();
-            do{
-                TableRow dbOutputRow = new TableRow(this);
-                dbOutputRow.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                TableRow.LayoutParams params = new TableRow.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                TextView outputID = new TextView(this);
-                params.weight = 1.0f;
-                outputID.setLayoutParams(params);
-                outputID.setText(cursor.getString(idIndex));
-                dbOutputRow.addView(outputID);
-
-                TextView outputStamp = new TextView(this);
-                params.weight = 3.0f;
-                outputStamp.setLayoutParams(params);
-                outputStamp.setText(cursor.getString(stampIndex));
-                dbOutputRow.addView(outputStamp);
-
-                TextView outputModel= new TextView(this);
-                params.weight = 3.0f;
-                outputModel.setLayoutParams(params);
-                outputModel.setText(cursor.getString(modelIndex));
-                dbOutputRow.addView(outputModel);
-
-                TextView outputYear= new TextView(this);
-                params.weight = 3.0f;
-                outputYear.setLayoutParams(params);
-                outputYear.setText(cursor.getString(yearIndex));
-                dbOutputRow.addView(outputYear);
-
-                TextView outputMileage= new TextView(this);
-                params.weight = 3.0f;
-                outputMileage.setLayoutParams(params);
-                outputMileage.setText(cursor.getString(mileageIndex));
-                dbOutputRow.addView(outputMileage);
-
-                Button deleteBtn = new Button(this);
-                deleteBtn.setOnClickListener(this);
-                params.weight = 1.0f;
-                deleteBtn.setLayoutParams(params);
-                deleteBtn.setText("Удалить");
-                deleteBtn.setId(cursor.getInt(idIndex));
-                dbOutputRow.addView(deleteBtn);
-
-                dbOutput.addView(dbOutputRow);
-            } while(cursor.moveToNext());
-        }
-        cursor.close();
     }
 
     @Override
     public void onClick(View v) {
-        String stamp = dbStamp.getText().toString();
-        String model = dbModel.getText().toString();
-        String year = dbYear.getText().toString() + "г";
-        String mileage = dbMileage.getText().toString() + "км";
-
         switch (v.getId()) {
-
-            case R.id.btnAdd:
-                contentValues = new ContentValues();
-
-                contentValues.put(DBHelper.KEY_STAMP, stamp);
-                contentValues.put(DBHelper.KEY_MODEL, model);
-                contentValues.put(DBHelper.KEY_YEAR, year);
-                contentValues.put(DBHelper.KEY_MILEAGE, mileage);
-
-                database.insert(DBHelper.TABLE_CONTACTS, null, contentValues);
-
-                UpdateTable();
-
-                dbStamp.setText(null);
-                dbModel.setText(null);
-                dbYear.setText(null);
-                dbMileage.setText(null);
-                break;
-
-            case R.id.btnClear:
-                database.delete(DBHelper.TABLE_CONTACTS, null, null);
-                TableLayout dbOutput = findViewById(R.id.dbOutput);
-                dbOutput.removeAllViews();
-                UpdateTable();
-
-                dbStamp.setText(null);
-                dbModel.setText(null);
-                dbYear.setText(null);
-                dbMileage.setText(null);
-                break;
-
-            default:
-                View outputDBRow = (View) v.getParent();
-                ViewGroup outputDB = (ViewGroup) outputDBRow.getParent();
-                outputDB.removeView(outputDBRow);
-                outputDB.invalidate();
-
-                database.delete(DBHelper.TABLE_CONTACTS, DBHelper.KEY_ID + " = ?", new String[]{String.valueOf((v.getId()))});
-
-                contentValues = new ContentValues();
-                Cursor cursorUpdater = database.query(DBHelper.TABLE_CONTACTS, null, null, null, null, null, null);
-                if (cursorUpdater.moveToFirst()) {
-                    int idIndex = cursorUpdater.getColumnIndex(DBHelper.KEY_ID);
-                    int stampIndex = cursorUpdater.getColumnIndex(DBHelper.KEY_STAMP);
-                    int modelIndex = cursorUpdater.getColumnIndex(DBHelper.KEY_MODEL);
-                    int yearIndex = cursorUpdater.getColumnIndex(DBHelper.KEY_YEAR);
-                    int mileageIndex = cursorUpdater.getColumnIndex(DBHelper.KEY_MILEAGE);
-                    int realID = 1;
-                    do {
-                        if(cursorUpdater.getInt(idIndex) > realID) {
-                            contentValues.put(DBHelper.KEY_ID, realID);
-                            contentValues.put(DBHelper.KEY_STAMP, cursorUpdater.getString(stampIndex));
-                            contentValues.put(DBHelper.KEY_MODEL, cursorUpdater.getString(modelIndex));
-                            contentValues.put(DBHelper.KEY_YEAR, cursorUpdater.getString(yearIndex));
-                            contentValues.put(DBHelper.KEY_MILEAGE, cursorUpdater.getString(mileageIndex));
-                            database.replace(DBHelper.TABLE_CONTACTS, null, contentValues);
+            case R.id.btnEntry:
+                boolean logged = true;
+                if(login.getText().toString().equals("admin") && password.getText().toString().equals("admin")){
+                    startActivity(new Intent(this, Administrators.class));
+                    break;
+                }
+                Cursor logCursor = database.query(DBHelper.TABLE_AUTHORIZATION,null,null,null,null,null,null);
+                if(logCursor.moveToFirst()){
+                    int loginIndex = logCursor.getColumnIndex(DBHelper.KEY_LOGIN);
+                    int passwordIndex = logCursor.getColumnIndex(DBHelper.KEY_PASSWORD);
+                    do{
+                        if(login.getText().toString().equals(logCursor.getString(loginIndex)) && password.getText().toString().equals(logCursor.getString(passwordIndex))){
+                            logged = false;
+                            startActivity(new Intent(this, Users.class));
+                            break;
                         }
-                        realID++;
-                    }while(cursorUpdater.moveToNext());
-                    if(cursorUpdater.moveToLast()) {
-                    database.delete(DBHelper.TABLE_CONTACTS, DBHelper.KEY_ID + " = ?", new String[]{cursorUpdater.getString(idIndex)});
-                    }
-                    UpdateTable();
+                    }while(logCursor.moveToNext());
+                }
+                logCursor.close();
+                if(logged) {
+                    Toast.makeText(this, "Введённая комбинация логина и пароля не была найдена", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.btnReg:
+
+                if(login.getText().toString().equals("") || login.getText().toString().equals("")){
+                    Toast.makeText(this,"Заполните все поля", Toast.LENGTH_LONG).show();
+                    break;
+                }
+                Cursor regCursor = database.query(DBHelper.TABLE_AUTHORIZATION,null,null,null,null,null,null);
+                boolean reg = true;
+                if(regCursor.moveToFirst()){
+                    int loginIndex = regCursor.getColumnIndex(DBHelper.KEY_LOGIN);
+                    do{
+                        if(login.getText().toString().equals(regCursor.getString(loginIndex)) || login.getText().toString().equals("admin")){
+                            reg = false;
+                            Toast.makeText(this,"Пользователь уже зарегистрирован", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }while(regCursor.moveToNext());
+                }
+                if(reg) {
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(DBHelper.KEY_LOGIN, login.getText().toString());
+                    contentValues.put(DBHelper.KEY_PASSWORD, password.getText().toString());
+                    database.insert(DBHelper.TABLE_AUTHORIZATION, null, contentValues);
+                    regCursor.close();
+                    Toast.makeText(this, "Регистрация прошла успешно", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
